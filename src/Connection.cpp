@@ -1,10 +1,9 @@
-
-
 #include <random>
 
 class Connection {
   private:
     enum BGPMessage { OPEN, UPDATE, NOTIFICATION, KEEPALIVE };
+    std::vector<std::string> neighbours;
 
   public:
     Host sourceHost;
@@ -12,7 +11,9 @@ class Connection {
     Router nextHop;
     double holdTime;
 
-    Connection(Host _sourceHost, Router _nextHop, Host _destinationHost) : sourceHost(_sourceHost), nextHop(_nextHop), destinationHost(_destinationHost) {}
+    Connection(Host _sourceHost, Router _nextHop, Host _destinationHost) : sourceHost(_sourceHost), nextHop(_nextHop), destinationHost(_destinationHost) {
+        neighbours = nextHop.getNeighbours();
+    }
 
     double getHoldTime() {
         double min = 0.0;
