@@ -3,6 +3,8 @@
 class Connection {
   private:
 
+    int sourceEntityId;
+    int destinationEntityId;
     int id;
     std::string ipAddress;
     int distance;
@@ -15,22 +17,32 @@ class Connection {
     Connection() {}
 
     Connection(int _sourceEntityId, int _destinationEntityId, int _numberOfNetworks) {
-        configureEntityConnection(_sourceEntityId,_destinationEntityId, _numberOfNetworks);
+        sourceEntityId = _sourceEntityId;
+        destinationEntityId = _destinationEntityId;
+        
+        configureEntityConnection(_numberOfNetworks);
+    }
+
+    int getSourceEntityId() {
+        return sourceEntityId;
+    }
+    int getDestinationEntityId() {
+        return destinationEntityId;
     }
 
     /**
      * ip addresses between two entities
      * distance between them
      */
-    void configureEntityConnection(int _sourceEntityId, int _destinationEntityId, int _numberOfNetworks) {
-        generateId(_sourceEntityId, _destinationEntityId);
-        generateIPAddress(_sourceEntityId, _destinationEntityId, _numberOfNetworks);
+    void configureEntityConnection(int _numberOfNetworks) {
+        generateId();
+        generateIPAddress(_numberOfNetworks);
         generateDistance();
     }
 
-    void generateId(int _sourceEntityId, int _destinationEntityId) {
-        std::string sourceEntityIdToString = std::to_string(_sourceEntityId);
-        std::string destinationEntityIdToString = std::to_string(_destinationEntityId);
+    void generateId() {
+        std::string sourceEntityIdToString = std::to_string(sourceEntityId);
+        std::string destinationEntityIdToString = std::to_string(destinationEntityId);
 
         std::string idString = sourceEntityIdToString + destinationEntityIdToString;
         id = stoi(idString);
@@ -44,18 +56,18 @@ class Connection {
      * 11.22.0.1 R1 towards R2
      * 11.33.0.2 R2 towards R1
      */
-    void generateIPAddress(int _sourceRouter, int _destinationRouter, int _numberOfNetworks) {
+    void generateIPAddress(int _numberOfNetworks) {
 
-        std::string sourceRouterToString = std::to_string(_sourceRouter); //1
-        std::string first = sourceRouterToString + sourceRouterToString; //11
-        if (sourceRouterToString.length() > 1) {
-            first = sourceRouterToString + "0";
+        std::string sourceEntityToString = std::to_string(sourceEntityId); //1
+        std::string first = sourceEntityToString + sourceEntityToString; //11
+        if (sourceEntityToString.length() > 1) {
+            first = sourceEntityToString + "0";
         }
 
-        std::string destinationRouterToString = std::to_string(_destinationRouter); //2
-        std::string second = destinationRouterToString + destinationRouterToString; //11
-        if (destinationRouterToString.length() > 1) {
-            second = destinationRouterToString + "0";
+        std::string destinationEntityToString = std::to_string(destinationEntityId); //2
+        std::string second = destinationEntityToString + destinationEntityToString; //11
+        if (destinationEntityToString.length() > 1) {
+            second = destinationEntityToString + "0";
         }
 
         std::string third = "0";
