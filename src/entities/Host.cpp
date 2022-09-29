@@ -5,13 +5,14 @@ class Host {
   private:
     int id;
     std::string name;
-    std::string homeRouter;
+    Packet sentPacket;
+    Packet receivedPacket;
 
   public:
-    Host(int _id, std::string _name, std::string _homeRouter) {
+
+    Host(int _id, std::string _name) : sentPacket(sentPacket), receivedPacket(receivedPacket) {
         id = _id;
         name = _name;
-        homeRouter = _homeRouter;
     }
 
     int getId() {
@@ -22,8 +23,12 @@ class Host {
         return name;
     }
 
-    std::string getHomeRouter() {
-        return homeRouter;
+    void sendPacket(Packet _sentPacket) {
+        sentPacket = _sentPacket;
+    }
+
+    void receivePacket(Packet _receivedPacket) {
+        receivedPacket = _receivedPacket;
     }
 
 };

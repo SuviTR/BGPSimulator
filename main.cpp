@@ -30,8 +30,8 @@ int main() {
     AS2.createRouters(4, 7, 4);
     std::vector<Router> routerListAS2 = AS2.getRouters();
 
-    Host sourceHost = Host(1, "H1","R1");
-    Host destinationHost = Host(2, "H2", "R10");
+    Host sourceHost = Host(1, "H1");
+    Host destinationHost = Host(2, "H2");
 
     /**
      * Configure connections
@@ -50,7 +50,7 @@ int main() {
     Connection connAS1_R3_R4 = Connection(routerListAS1[2].getId(), routerListAS1[3].getId(), numberOfNetworks++);
     Connection connAS1_R4_R5 = Connection(routerListAS1[3].getId(), routerListAS1[4].getId(), numberOfNetworks++);
     Connection connAS1_R5_R6e = Connection(routerListAS1[4].getId(), routerListAS1[5].getId(), numberOfNetworks++);
-    
+
     /**
      * Configure connections
      * Example AS1 -> AS2
@@ -63,12 +63,24 @@ int main() {
      * R7e <-> R8 <-> R9 <-> H2
      * R7e <-> R10 <-> H2
      */
-    Connection connAS2_R7_R8 = Connection(routerListAS2[0].getId(), routerListAS2[1].getId(), numberOfNetworks++);
+    Connection connAS2_R7e_R8 = Connection(routerListAS2[0].getId(), routerListAS2[1].getId(), numberOfNetworks++);
     Connection connAS2_R8_R9 = Connection(routerListAS2[1].getId(), routerListAS2[2].getId(), numberOfNetworks++);
     Connection connAS2_R9_H2 = Connection(routerListAS1[2].getId(), destinationHost.getId(), numberOfNetworks++);
 
-    Connection connAS2_R7_R10 = Connection(routerListAS2[0].getId(), routerListAS2[3].getId(), numberOfNetworks++);
+    Connection connAS2_R7e_R10 = Connection(routerListAS2[0].getId(), routerListAS2[3].getId(), numberOfNetworks++);
     Connection connAS2_R10_H2 = Connection(routerListAS1[3].getId(), destinationHost.getId(), numberOfNetworks++);
+
+
+    /**
+     * Establish a TCP connection
+     */ 
+    Packet synPacket = Packet();
+    synPacket.setSYNFlags(0,0,0,0,0,0,1,0);
+
+    sourceHost.sendPacket(synPacket);
+
+
+    Packet packet = Packet(2500, 80, "Hello World!");
 
     //for testing
     std::cout << connAS1_H1_R1.getIPAddress() << std::endl; //get H1 -> R1

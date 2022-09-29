@@ -99,6 +99,13 @@ class Connection {
         return distance;
     }
 
+    /**
+     * Establish a TCP connection
+     */
+    void establishConnection() {
+
+    }
+
 
     /*
     std::string getBGPMessage() {
