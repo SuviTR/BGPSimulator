@@ -1,34 +1,45 @@
+#include "Host.h"
+
 #include <string>
+//#include "../Packet.h"
+
 #include <vector>
 
-class Host {
-  private:
-    int id;
-    std::string name;
-    Packet sentPacket;
-    Packet receivedPacket;
+Host::Host(int _id, std::string _name) /*: sentPacket(sentPacket), receivedPacket(receivedPacket)*/ {
+    id = _id;
+    name = _name;
+}
 
-  public:
+void Host::setConnection() {
+    
+}
 
-    Host(int _id, std::string _name) : sentPacket(sentPacket), receivedPacket(receivedPacket) {
-        id = _id;
-        name = _name;
-    }
+int Host::getId() {
+    return id;
+}
 
-    int getId() {
-        return id;
-    }
+std::string Host::getName() {
+    return name;
+}
 
-    std::string getName() {
-        return name;
-    }
 
-    void sendPacket(Packet _sentPacket) {
-        sentPacket = _sentPacket;
-    }
+void Host::sendPacket(Packet _sentPacket) {
+    sentPacket = _sentPacket;
 
-    void receivePacket(Packet _receivedPacket) {
-        receivedPacket = _receivedPacket;
-    }
+    //get neighbours -> routers
+    //every entity has a connection
+    //get those connections
+    //connection -> get response time -> the one that responses faster -> create routing table
+}
 
-};
+void Host::receivePacket(Packet _receivedPacket) {
+    receivedPacket = _receivedPacket;
+}
+
+void Host::setNeighbours(std::vector<int> _neighbourIds) {
+    neighbourIds = _neighbourIds;
+}
+
+std::vector<int> Host::getNeighbours() {
+    return neighbourIds;
+}

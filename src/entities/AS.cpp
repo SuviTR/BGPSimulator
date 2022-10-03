@@ -1,3 +1,5 @@
+#include "AS.h"
+
 #include "Router.cpp"
 
 #include <iostream>
@@ -5,41 +7,30 @@
 #include <vector>
 #include <random>
 
-class AS {
-  private:
-    std::string name;
-    int numberOfRouters;
-    std::vector<Router> routerList;
-    int numberOfNetworks;
-    int ipPrefix;
-    int eBGP;
+AS::AS(std::string _name) { // Constructor with parameters
+    name = _name;
+    numberOfNetworks = 1;
+}
 
-  public:
-    AS(std::string _name) { // Constructor with parameters
-        name = _name;
-        numberOfNetworks = 1;
-    }
+void AS::createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP) { //6, 1, 6
+    numberOfRouters = _numberOfRouters;
+    ipPrefix = _ipPrefix;
+    eBGP = _eBGP;
+    routerList.clear();
+    
+    for (int i = 1; i <= numberOfRouters; i++) {
 
-    void createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP) { //6, 1
-        numberOfRouters = _numberOfRouters;
-        ipPrefix = _ipPrefix;
-        eBGP = _eBGP;
-        
-        for (int i = 1; i <= numberOfRouters; i++) {
-
-            std::string name = "R" + std::to_string(_ipPrefix);
-            if (i == eBGP) {
-                name = name + "e";
-            }
-            
-            Router router = Router(_ipPrefix, name);
-            routerList.push_back(router);
-            _ipPrefix++;
+        std::string name = "R" + std::to_string(ipPrefix);
+        if (i == eBGP) {
+            name = name + "e";
         }
+        
+        Router router = Router(ipPrefix, name);
+        routerList.push_back(router);
+        ipPrefix++;
     }
+}
 
-    std::vector<Router> getRouters() {
-        return routerList;
-    }
-
-};
+std::vector<Router> AS::getRouters() {
+    return routerList;
+}

@@ -1,47 +1,49 @@
+#include "Router.h"
+
 #include <string>
 #include <vector>
 #include <random>
 
-class Router {
-  private:
-    int id;
-    std::string name;
-    std::vector<std::string> neighbours;
+Router::Router(int _id, std::string _name) {
+    id = _id;
+    name = _name;
+}
+/*
+Router::Router(int _id, std::string _name, std::vector<std::string> _neighbours) {
+    id = _id;
+    name = _name;
+    neighbours = _neighbours;
+}*/
 
-  public:
-    Router(int _id, std::string _name) {
-        id = _id;
-        name = _name;
+void Router::setConnection() {
+
+}
+
+bool Router::getHello() {
+    bool hello = false;
+    int min = 0;
+    int max = 10;
+    int result = (double)rand() / max;
+
+    if (result > 2) {
+        hello = true;
     }
-    /*
-    Router(int _id, std::string _name, std::vector<std::string> _neighbours) {
-        id = _id;
-        name = _name;
-        neighbours = _neighbours;
-    }*/
+    return hello;
+}
 
-    bool getHello() {
-        bool hello = false;
-        int min = 0;
-        int max = 10;
-        int result = (double)rand() / max;
+int Router::getId() {
+    return id;
+}
 
-        if (result > 2) {
-            hello = true;
-        }
-        return hello;
-    }
+std::string Router::getName() {
+    return name;
+}
 
-    int getId() {
-        return id;
-    }
+void Router::setNeighbours(std::vector<int> _neighbourIds) {
+    neighbourIds = _neighbourIds;
+}
 
-    std::string getName() {
-        return name;
-    }
+std::vector<int> Router::getNeighbours() {
+    return neighbourIds;
+}
 
-    std::vector<std::string> getNeighbours() {
-        return neighbours;
-    }
-
-};
