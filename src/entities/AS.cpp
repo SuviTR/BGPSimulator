@@ -25,12 +25,12 @@ void AS::createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP) { //6, 1,
             name = name + "e";
         }
         
-        Router router = Router(ipPrefix, name);
+        Device router = Device(ipPrefix, name);
         routerList.push_back(router);
         ipPrefix++;
     }
 }
 
-std::vector<Router> AS::getRouters() {
+std::vector<Device> AS::getRouters() {
     return routerList;
 }

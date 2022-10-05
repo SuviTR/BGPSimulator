@@ -1,11 +1,14 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+#include "entities/Device.h"
+
 #include <random>
 
 class Connection {
   private:
-
+    //Device sourceEntity;
+    //Device destinationEntity;
     int sourceEntityId;
     int destinationEntityId;
     int id;
@@ -19,7 +22,12 @@ class Connection {
   public:
     Connection();
 
+    //Connection(Device _sourceEntity, Device _destinationEntity, int _numberOfNetworks);
+
     Connection(int _sourceEntityId, int _destinationEntityId, int _numberOfNetworks);
+
+    //Device getSourceEntity();
+    //Device getDestinationEntity();
 
     int getSourceEntityId();
     int getDestinationEntityId();
@@ -43,6 +51,8 @@ class Connection {
 
     void generateDistance();
     int getDistance();
+
+    double getResponseTime();
 
     double getHoldTime();
 

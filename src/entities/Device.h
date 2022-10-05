@@ -1,7 +1,9 @@
 #ifndef ENTITY_DEVICE_H
 #define ENTITY_DEVICE_H
 
+#include "../Connection.h"
 #include "../Packet.h"
+#include "../RoutingTable.h"
 
 #include <string>
 #include <vector>
@@ -12,28 +14,39 @@ class Device {
     std::string name;
     Packet sentPacket;
     Packet receivedPacket;
-    std::vector<int> neighbourIds;
-    std::vector<std::string> neighbours;
+    std::vector<Connection> connections;
+    std::vector<int> neighbours;
+    bool sendSucceeded;
 
   public:
 
     Device(int _id, std::string _name);
 
-    void setConnection();
-
-    void sendPacket(Packet _sentPacket);
-
-    void receivePacket(Packet _receivedPacket);
+    //void setConnection(std::vector<Connection> _connections);
 
     /**
      * Set neighbour entity ids
      */
-    void setNeighbours(std::vector<int> _neighbourIds);
+    void setNeighbours(std::vector<int> _neighbours);
 
     /**
      * Get neighbour entity ids
      */
     std::vector<int> getNeighbours();
+
+    void setConnections(std::vector<Connection> _connections);
+
+    std::vector<Connection> getConnections();
+
+    void sendPacket(Packet _sentPacket);
+
+    void receivePacket(Packet _receivedPacket);
+
+    void setSendSucceeded(bool _sendSucceeded);
+    
+    bool getSendSucceeded();
+
+    //RoutingTable getRoutingTable();
     
     /**
      * Get the id of the router

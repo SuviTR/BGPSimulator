@@ -1,14 +1,17 @@
 #include "Connection.h"
+#include "helpers/RandomGenerator.cpp"
 
 #include <random>
 
-
 Connection::Connection() {}
+/*
+Connection::Connection(Device _sourceEntity, Device _destinationEntity, int _numberOfNetworks) : sourceEntity(_sourceEntity), destinationEntity(_destinationEntity) {
+    configureEntityConnection(_numberOfNetworks);
+}*/
 
 Connection::Connection(int _sourceEntityId, int _destinationEntityId, int _numberOfNetworks) {
     sourceEntityId = _sourceEntityId;
     destinationEntityId = _destinationEntityId;
-    
     configureEntityConnection(_numberOfNetworks);
 }
 
@@ -18,6 +21,14 @@ int Connection::getSourceEntityId() {
 int Connection::getDestinationEntityId() {
     return destinationEntityId;
 }
+
+/*
+Device Connection::getSourceEntity() {
+    return sourceEntity;
+}
+Device Connection::getDestinationEntity() {
+    return destinationEntity;
+}*/
 
 /**
  * ip addresses between two entities
@@ -69,14 +80,15 @@ std::string Connection::getIPAddress() {
 }
 
 void Connection::generateDistance() {
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist10(1,10);
-
-    distance = dist10(rng);
+    distance = RandomGenerator().getRandom(1,10);
 }
 int Connection::getDistance() {
     return distance;
+}
+
+double Connection::getResponseTime() {
+    double responseTime = RandomGenerator().getRandom(1,6);
+    return responseTime;
 }
 
 double Connection::getHoldTime() {

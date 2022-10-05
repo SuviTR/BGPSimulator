@@ -1,7 +1,7 @@
 #ifndef ENTITY_AS_H
 #define ENTITY_AS_H
 
-#include "Router.h"
+#include "Device.h"
 
 #include <iostream>
 #include <string>
@@ -12,7 +12,7 @@ class AS {
   private:
     std::string name;
     int numberOfRouters;
-    std::vector<Router> routerList;
+    std::vector<Device> routerList;
     int numberOfNetworks;
     int ipPrefix;
     int eBGP;
@@ -22,7 +22,7 @@ class AS {
 
     void createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP);
 
-    std::vector<Router> getRouters();
+    std::vector<Device> getRouters();
 
 };
 
