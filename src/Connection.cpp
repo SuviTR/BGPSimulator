@@ -51,6 +51,11 @@ int Connection::getId() {
     return id;
 }
 
+/*
+void generateName() {}
+int getName() {}
+*/
+
     /**
  * 2 routers:
  * 11.22.0.1 R1 towards R2
@@ -87,24 +92,13 @@ int Connection::getDistance() {
 }
 
 double Connection::getResponseTime() {
-    double responseTime = RandomGenerator().getRandom(1,6);
+    double responseTime = RandomGenerator().getRandom(1,10);
     return responseTime;
 }
 
 double Connection::getHoldTime() {
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist6(1,6);
-
-    distance = dist6(rng);
-    return distance;
-}
-
-/**
- * Establish a TCP connection
- */
-void Connection::establishConnection() {
-
+    double holdTime = RandomGenerator().getRandom(1,6);
+    return holdTime;
 }
 
 

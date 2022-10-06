@@ -224,37 +224,32 @@ int main() {
     synPacket.createSYNPacket("SYN");
 
     sourceHost.sendPacket(synPacket); //everybody has to know its neighbours, connection get response
-    std::cout << "Send successful? source " << sourceHost.getName() << " " << sourceHost.getSendSuccessful() << std::endl;
     if (sourceHost.getSendSuccessful()) {
-        std::cout << "Send successful before? " << routerListAS1[0].getName() << " " << sourceHost.getSendSuccessful() << std::endl;
         routerListAS1[0].sendPacket(synPacket);
         for (int i = 1; i < routerListAS1.size(); i++) {
             if (routerListAS1[i-1].getSendSuccessful()) {
-                std::cout << "Send successful? " << routerListAS1[i-1].getName() << " " << routerListAS1[i-1].getSendSuccessful() << std::endl;
                 routerListAS1[i].sendPacket(synPacket);
             }
         }
-        std::cout << "Send successful? " << routerListAS1[routerListAS1.size()-1].getName() << " " << routerListAS1[routerListAS1.size()-1].getSendSuccessful() << std::endl; 
     }
 
     if (routerListAS1[routerListAS1.size()-1].getSendSuccessful()) {
-        std::cout << "Send successful before? " << routerListAS2[0].getName() << " " << routerListAS1[routerListAS1.size()-1].getSendSuccessful() << std::endl;
         routerListAS2[0].sendPacket(synPacket);
         for (int i = 1; i < routerListAS2.size(); i++) {
             if (routerListAS2[i-1].getSendSuccessful()) {
-                std::cout << "Send successful? " << routerListAS2[i-1].getName() << " " << routerListAS2[i-1].getSendSuccessful() << std::endl;
                 routerListAS2[i].sendPacket(synPacket);
             }
         }
-        std::cout << "Send successful? " << routerListAS2[routerListAS2.size()-1].getName() << " " << routerListAS2[routerListAS2.size()-1].getSendSuccessful() << std::endl;
     }
 
     Packet packet = Packet(2500, 80, "Hello World!");
 
     //for testing
+    /*
     std::cout << connsAS1[2].getIPAddress() << std::endl; //get H1 -> R1
     std::cout << connsAS2[2].getIPAddress() << std::endl; //get R1 -> R2
     std::cout << connsAS2[3].getDistance() << std::endl; //get H1 -> R1 distance
     std::cout << connsAS2[3].getHoldTime() << std::endl; //get H1 -> R1 hold time
+    */
 
 }

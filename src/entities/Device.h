@@ -17,6 +17,7 @@ class Device {
     std::vector<Connection> connections;
     std::vector<int> neighbours;
     bool sendSuccessful;
+    RoutingTable routingTable;
 
   public:
 
@@ -46,7 +47,11 @@ class Device {
     
     bool getSendSuccessful();
 
-    //RoutingTable getRoutingTable();
+    void setRoutingTable(RoutingTable _routingTable);
+
+    RoutingTable getRoutingTable();
+
+    void message(std::string _message, double _responseTime);
     
     /**
      * Get the id of the router

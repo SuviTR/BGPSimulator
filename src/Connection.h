@@ -15,6 +15,7 @@ class Connection {
     std::string ipAddress;
     int distance;
     //double holdTime;
+    //std::string name;
 
     enum BGPMessage { OPEN, UPDATE, NOTIFICATION, KEEPALIVE };
     std::vector<std::string> neighbours;
@@ -41,6 +42,9 @@ class Connection {
     void generateId();
     int getId();
 
+    //void generateName();
+    //int getName();
+
      /**
      * 2 routers:
      * 11.22.0.1 R1 towards R2
@@ -55,12 +59,6 @@ class Connection {
     double getResponseTime();
 
     double getHoldTime();
-
-    /**
-     * Establish a TCP connection
-     */
-    void establishConnection();
-
 
     /*
     std::string getBGPMessage() {

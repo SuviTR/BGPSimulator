@@ -17,6 +17,7 @@ void Device::setConnection(std::vector<Connection> _connections) {
 
 void Device::sendPacket(Packet _sentPacket) {
     sentPacket = _sentPacket;
+    double curTime;
     double prevTime = 10000;
     Connection fastestConn = Connection();
     bool connectionFound = false;
@@ -25,20 +26,19 @@ void Device::sendPacket(Packet _sentPacket) {
     //neighbour connections
     if (connections.size() > 1) {
         for (int i = 0; i < connections.size(); i++) {
-            double curTime = connections[i].getResponseTime();
+            curTime = connections[i].getResponseTime();
             std::cout << "curTime " << curTime << "\n";
-            if (curTime != 0) {
+            if (curTime > 1) {
                 if (curTime < prevTime) {
                     fastestConn = connections[i];
                     connectionFound = true;
                 }
+                prevTime = curTime;
             }
-            prevTime = curTime;
         }
     } else {
-        double curTime = connections[0].getResponseTime();
-        std::cout << "curTime else " << curTime << "\n";
-        if (curTime != 0) {
+        curTime = connections[0].getResponseTime();
+        if (curTime > 1) {
             fastestConn = connections[0];
             connectionFound = true;
         }
@@ -48,7 +48,14 @@ void Device::sendPacket(Packet _sentPacket) {
         RoutingTable routingTable = RoutingTable();
         routingTable.addRoute(fastestConn);
         setSendSuccessful(true);
-    } 
+        if (curTime == 1 || prevTime < curTime) {
+            message("Packet was successufully transmitted. Response time:", prevTime);
+        } else {
+            message("Packet was successufully transmitted. Response time:", curTime);
+        }
+    } else {
+        message("Packet could not be transmitted because the connection is not responding. Response time:", curTime);
+    }
 }
 
 void Device::setSendSuccessful(bool _sendSuccessful) {
@@ -57,6 +64,14 @@ void Device::setSendSuccessful(bool _sendSuccessful) {
 
 bool Device::getSendSuccessful() {
     return sendSuccessful;
+}
+
+void Device::setRoutingTable(RoutingTable _routingTable) {
+    routingTable = _routingTable;
+}
+
+RoutingTable Device::getRoutingTable() {
+    return routingTable;
 }
 
 void Device::receivePacket(Packet _receivedPacket) {
@@ -77,6 +92,10 @@ void Device::setConnections(std::vector<Connection> _connections) {
 
 std::vector<Connection> Device::getConnections(){
     return connections;
+}
+
+void Device::message(std::string _message, double _responseTime) {
+    std::cout << "Message from " << getName() << ": " << _message << " " << _responseTime << std::endl;
 }
 
 int Device::getId() {
