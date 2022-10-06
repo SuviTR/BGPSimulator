@@ -27,8 +27,18 @@ int main() {
     AS1.createRouters(6, 1, 6); //create routers
     std::vector<Device> routerListAS1 = AS1.getRouters();
 
-    AS2.createRouters(4, 7, 4);
+    /*
+    for (int i = 0; i < routerListAS1.size(); i++) { 
+        std::cout << routerListAS1[i].getName() << "\n";
+    }*/
+    
+    AS2.createRouters(4, 7, 1);
     std::vector<Device> routerListAS2 = AS2.getRouters();
+
+    /*
+    for (int i = 0; i < routerListAS2.size(); i++) { 
+        std::cout << routerListAS2[i].getName() << "\n";
+    }*/
 
     Device sourceHost = Device(1, "H1");
     Device destinationHost = Device(2, "H2");
@@ -160,7 +170,7 @@ int main() {
     connections.push_back(connsAS1[5]);
     routerListAS1[4].setConnections(connections);
     connections.clear();
-    /*
+    
     //R6
     connections.push_back(conn_AS1_AS2);
     routerListAS1[5].setConnections(connections);
@@ -186,7 +196,7 @@ int main() {
     connections.push_back(connsAS2[4]);
     routerListAS2[3].setConnections(connections);
     connections.clear();
-    */
+    
 
     /*Not yet implemented
     //destination host
@@ -214,16 +224,29 @@ int main() {
     synPacket.createSYNPacket("SYN");
 
     sourceHost.sendPacket(synPacket); //everybody has to know its neighbours, connection get response
-    std::cout << "Send succeeded? source" << sourceHost.getName() << sourceHost.getSendSucceeded() << std::endl;
-    if (sourceHost.getSendSucceeded()) {
-        for (int i = 0; i < routerListAS1.size(); i++) {
-            if (i-1 >= 0 && routerListAS1[i-1].getSendSucceeded()) {
-                std::cout << "Send succeeded? " << routerListAS1[i-1].getName() << " " << routerListAS1[i-1].getSendSucceeded() << std::endl;
-                routerListAS1[i].sendPacket(synPacket);
-            } else {
+    std::cout << "Send successful? source " << sourceHost.getName() << " " << sourceHost.getSendSuccessful() << std::endl;
+    if (sourceHost.getSendSuccessful()) {
+        std::cout << "Send successful before? " << routerListAS1[0].getName() << " " << sourceHost.getSendSuccessful() << std::endl;
+        routerListAS1[0].sendPacket(synPacket);
+        for (int i = 1; i < routerListAS1.size(); i++) {
+            if (routerListAS1[i-1].getSendSuccessful()) {
+                std::cout << "Send successful? " << routerListAS1[i-1].getName() << " " << routerListAS1[i-1].getSendSuccessful() << std::endl;
                 routerListAS1[i].sendPacket(synPacket);
             }
         }
+        std::cout << "Send successful? " << routerListAS1[routerListAS1.size()-1].getName() << " " << routerListAS1[routerListAS1.size()-1].getSendSuccessful() << std::endl; 
+    }
+
+    if (routerListAS1[routerListAS1.size()-1].getSendSuccessful()) {
+        std::cout << "Send successful before? " << routerListAS2[0].getName() << " " << routerListAS1[routerListAS1.size()-1].getSendSuccessful() << std::endl;
+        routerListAS2[0].sendPacket(synPacket);
+        for (int i = 1; i < routerListAS2.size(); i++) {
+            if (routerListAS2[i-1].getSendSuccessful()) {
+                std::cout << "Send successful? " << routerListAS2[i-1].getName() << " " << routerListAS2[i-1].getSendSuccessful() << std::endl;
+                routerListAS2[i].sendPacket(synPacket);
+            }
+        }
+        std::cout << "Send successful? " << routerListAS2[routerListAS2.size()-1].getName() << " " << routerListAS2[routerListAS2.size()-1].getSendSuccessful() << std::endl;
     }
 
     Packet packet = Packet(2500, 80, "Hello World!");

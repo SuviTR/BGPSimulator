@@ -16,7 +16,7 @@ class Device {
     Packet receivedPacket;
     std::vector<Connection> connections;
     std::vector<int> neighbours;
-    bool sendSucceeded;
+    bool sendSuccessful;
 
   public:
 
@@ -42,9 +42,9 @@ class Device {
 
     void receivePacket(Packet _receivedPacket);
 
-    void setSendSucceeded(bool _sendSucceeded);
+    void setSendSuccessful(bool _sendSuccessful);
     
-    bool getSendSucceeded();
+    bool getSendSuccessful();
 
     //RoutingTable getRoutingTable();
     

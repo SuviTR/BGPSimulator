@@ -20,13 +20,13 @@ void Device::sendPacket(Packet _sentPacket) {
     double prevTime = 10000;
     Connection fastestConn = Connection();
     bool connectionFound = false;
-    setSendSucceeded(false);
+    setSendSuccessful(false);
 
     //neighbour connections
     if (connections.size() > 1) {
         for (int i = 0; i < connections.size(); i++) {
             double curTime = connections[i].getResponseTime();
-            std::cout << "curTime" << curTime << "\n";
+            std::cout << "curTime " << curTime << "\n";
             if (curTime != 0) {
                 if (curTime < prevTime) {
                     fastestConn = connections[i];
@@ -37,7 +37,7 @@ void Device::sendPacket(Packet _sentPacket) {
         }
     } else {
         double curTime = connections[0].getResponseTime();
-        std::cout << "curTime" << curTime << "\n";
+        std::cout << "curTime else " << curTime << "\n";
         if (curTime != 0) {
             fastestConn = connections[0];
             connectionFound = true;
@@ -47,16 +47,16 @@ void Device::sendPacket(Packet _sentPacket) {
     if (connectionFound) {
         RoutingTable routingTable = RoutingTable();
         routingTable.addRoute(fastestConn);
-        setSendSucceeded(true);
+        setSendSuccessful(true);
     } 
 }
 
-void Device::setSendSucceeded(bool _sendSucceeded) {
-    sendSucceeded = _sendSucceeded;
+void Device::setSendSuccessful(bool _sendSuccessful) {
+    sendSuccessful = _sendSuccessful;
 }
 
-bool Device::getSendSucceeded() {
-    return sendSucceeded;
+bool Device::getSendSuccessful() {
+    return sendSuccessful;
 }
 
 void Device::receivePacket(Packet _receivedPacket) {
