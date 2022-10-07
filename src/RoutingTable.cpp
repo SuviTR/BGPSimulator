@@ -6,7 +6,7 @@ RoutingTable::RoutingTable() {}
 
 
 void RoutingTable::addRoute(Connection _connection) {
-    std::cout << "Connection to the routing table " << _connection.getId() << "\n";
+    std::cout << "Connection " << _connection.getName() << " was added to the routing table." << std::endl;;
     routingTable.push_back(_connection);
 }
 /*

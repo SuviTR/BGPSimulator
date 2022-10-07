@@ -34,3 +34,7 @@ void AS::createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP) { //6, 1,
 std::vector<Device> AS::getRouters() {
     return routerList;
 }
+
+std::string AS::getName() {
+    return name;
+}

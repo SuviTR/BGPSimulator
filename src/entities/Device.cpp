@@ -45,8 +45,18 @@ void Device::sendPacket(Packet _sentPacket) {
     }
 
     if (connectionFound) {
+        std::cout << "Connection " << fastestConn.getName() << " was established." << std::endl;
+
         RoutingTable routingTable = RoutingTable();
         routingTable.addRoute(fastestConn);
+        
+        
+        std::vector<Connection> routing = routingTable.getRoutingTable();
+        std::cout << getName() << "'s routing table: " << std::endl;
+        for (int i = 0; i < routing.size(); i++) {
+            std::cout << routing[i].getName() << " " << routing[i].getIPAddress() << std::endl;
+        }
+
         setSendSuccessful(true);
         if (curTime == 1 || prevTime < curTime) {
             message("Packet was successufully transmitted. Response time:", prevTime);
@@ -95,7 +105,7 @@ std::vector<Connection> Device::getConnections(){
 }
 
 void Device::message(std::string _message, double _responseTime) {
-    std::cout << "Message from " << getName() << ": " << _message << " " << _responseTime << std::endl;
+    std::cout << "Message from " << getName() << ": " << _message << " " << _responseTime << "\n" << std::endl;
 }
 
 int Device::getId() {

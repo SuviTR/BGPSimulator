@@ -68,32 +68,30 @@ int main() {
         {routerListAS1[4].getId(),routerListAS1[5].getId()}
         };
 
+    std::string confAS1_names [7][2] = {
+        {sourceHost.getName(),routerListAS1[0].getName()}, 
+        {routerListAS1[0].getName(),routerListAS1[1].getName()}, 
+        {routerListAS1[1].getName(),routerListAS1[5].getName()},
+
+        {sourceHost.getName(),routerListAS1[2].getName()},
+        {routerListAS1[2].getName(),routerListAS1[3].getName()},
+        {routerListAS1[3].getName(),routerListAS1[4].getName()},
+        {routerListAS1[4].getName(),routerListAS1[5].getName()}
+        };
+
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            Connection conn = Connection(confAS1[i][j], confAS1[i][j+1], numberOfNetworks++);
+            Connection conn = Connection(confAS1[i][j], confAS1[i][j+1], "connAS1", confAS1_names[i][j], confAS1_names[i][j+1], numberOfNetworks++);
             connsAS1.push_back(conn);
-            //std::cout << j << "\n";
             break;
         }
-        //std::cout << i << "\n";
     }
-
-    /*
-    Connection connAS1_H1_R1 = Connection(sourceHost.getId(), routerListAS1[0].getId(), numberOfNetworks++);
-    Connection connAS1_R1_R2 = Connection(routerListAS1[0].getId(), routerListAS1[1].getId(), numberOfNetworks++);
-    Connection connAS1_R2_R6e = Connection(routerListAS1[1].getId(), routerListAS1[5].getId(), numberOfNetworks++);
-
-    Connection connAS1_H1_R3 = Connection(sourceHost.getId(), routerListAS1[2].getId(), numberOfNetworks++);
-    Connection connAS1_R3_R4 = Connection(routerListAS1[2].getId(), routerListAS1[3].getId(), numberOfNetworks++);
-    Connection connAS1_R4_R5 = Connection(routerListAS1[3].getId(), routerListAS1[4].getId(), numberOfNetworks++);
-    Connection connAS1_R5_R6e = Connection(routerListAS1[4].getId(), routerListAS1[5].getId(), numberOfNetworks++);
-    */
 
     /**
      * Configure connections
      * Example AS1 -> AS2
      */
-    Connection conn_AS1_AS2 = Connection(routerListAS1[5].getId(), routerListAS2[0].getId(), numberOfNetworks++);
+    Connection conn_AS1_AS2 = Connection(routerListAS1[5].getId(), routerListAS2[0].getId(), "connAS1_AS2", routerListAS1[5].getName(), routerListAS2[0].getName(), numberOfNetworks++);
 
     /**
      * Configure connections
@@ -114,23 +112,22 @@ int main() {
         {routerListAS2[3].getId(),destinationHost.getId()},
         };
 
+    std::string confAS2_names [5][2] = {
+        {routerListAS2[0].getName(),routerListAS2[1].getName()}, 
+        {routerListAS2[1].getName(),routerListAS2[2].getName()}, 
+        {routerListAS2[2].getName(),destinationHost.getName()},
+
+        {routerListAS2[0].getName(),routerListAS2[3].getName()},
+        {routerListAS2[3].getName(),destinationHost.getName()},
+        };
+
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            Connection conn = Connection(confAS2[i][j], confAS2[i][j+1], numberOfNetworks++);
+            Connection conn = Connection(confAS2[i][j], confAS2[i][j+1], "connAS2", confAS2_names[i][j], confAS2_names[i][j+1], numberOfNetworks++);
             connsAS2.push_back(conn);
-            //std::cout << j << "\n";
             break;
         }
-        //std::cout << i << "\n";
     }
-    /*
-    Connection connAS2_R7e_R8 = Connection(routerListAS2[0].getId(), routerListAS2[1].getId(), numberOfNetworks++);
-    Connection connAS2_R8_R9 = Connection(routerListAS2[1].getId(), routerListAS2[2].getId(), numberOfNetworks++);
-    Connection connAS2_R9_H2 = Connection(routerListAS2[2].getId(), destinationHost.getId(), numberOfNetworks++);
-
-    Connection connAS2_R7e_R10 = Connection(routerListAS2[0].getId(), routerListAS2[3].getId(), numberOfNetworks++);
-    Connection connAS2_R10_H2 = Connection(routerListAS2[3].getId(), destinationHost.getId(), numberOfNetworks++);
-    */
 
     /**
      * Set connections to each device
@@ -223,7 +220,7 @@ int main() {
     Packet synPacket = Packet();
     synPacket.createSYNPacket("SYN");
 
-    sourceHost.sendPacket(synPacket); //everybody has to know its neighbours, connection get response
+    sourceHost.sendPacket(synPacket);
     if (sourceHost.getSendSuccessful()) {
         routerListAS1[0].sendPacket(synPacket);
         for (int i = 1; i < routerListAS1.size(); i++) {
@@ -243,13 +240,5 @@ int main() {
     }
 
     Packet packet = Packet(2500, 80, "Hello World!");
-
-    //for testing
-    /*
-    std::cout << connsAS1[2].getIPAddress() << std::endl; //get H1 -> R1
-    std::cout << connsAS2[2].getIPAddress() << std::endl; //get R1 -> R2
-    std::cout << connsAS2[3].getDistance() << std::endl; //get H1 -> R1 distance
-    std::cout << connsAS2[3].getHoldTime() << std::endl; //get H1 -> R1 hold time
-    */
 
 }

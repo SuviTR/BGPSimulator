@@ -11,6 +11,7 @@ class Connection {
     //Device destinationEntity;
     int sourceEntityId;
     int destinationEntityId;
+    std::string name;
     int id;
     std::string ipAddress;
     int distance;
@@ -25,13 +26,17 @@ class Connection {
 
     //Connection(Device _sourceEntity, Device _destinationEntity, int _numberOfNetworks);
 
-    Connection(int _sourceEntityId, int _destinationEntityId, int _numberOfNetworks);
+    Connection(int _sourceEntityId, int _destinationEntityId, std::string _ASName, std::string _sourceEntityName, std::string _destinationEntityName, int _numberOfNetworks);
 
     //Device getSourceEntity();
     //Device getDestinationEntity();
 
     int getSourceEntityId();
     int getDestinationEntityId();
+
+    void generateName(std::string _ASName, std::string _sourceEntityName, std::string _destinationEntityName);
+    void setName(std::string _name);
+    std::string getName();
 
     /**
      * ip addresses between two entities

@@ -9,9 +9,10 @@ Connection::Connection(Device _sourceEntity, Device _destinationEntity, int _num
     configureEntityConnection(_numberOfNetworks);
 }*/
 
-Connection::Connection(int _sourceEntityId, int _destinationEntityId, int _numberOfNetworks) {
+Connection::Connection(int _sourceEntityId, int _destinationEntityId, std::string _ASName, std::string _sourceEntityName, std::string _destinationEntityName, int _numberOfNetworks) {
     sourceEntityId = _sourceEntityId;
     destinationEntityId = _destinationEntityId;
+    generateName(_ASName, _sourceEntityName, _destinationEntityName);
     configureEntityConnection(_numberOfNetworks);
 }
 
@@ -20,6 +21,19 @@ int Connection::getSourceEntityId() {
 }
 int Connection::getDestinationEntityId() {
     return destinationEntityId;
+}
+
+void Connection::generateName(std::string _ASName, std::string _sourceEntityName, std::string _destinationEntityName) {
+    std::string name = _ASName + "_" + _sourceEntityName + "_" + _destinationEntityName; //connAS1_H1_R1
+    setName(name);
+}
+
+void Connection::setName(std::string _name) {
+    name = _name;
+}
+
+std::string Connection::getName() {
+    return name;
 }
 
 /*

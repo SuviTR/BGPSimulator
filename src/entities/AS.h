@@ -24,6 +24,8 @@ class AS {
 
     std::vector<Device> getRouters();
 
+    std::string getName();
+
 };
 
 #endif
