@@ -15,7 +15,6 @@ class Connection {
     int id;
     std::string ipAddress;
     int distance;
-    //double holdTime;
     //std::string name;
 
     enum BGPMessage { OPEN, UPDATE, NOTIFICATION, KEEPALIVE };
@@ -101,35 +100,6 @@ class Connection {
      * @return the response time of the connection
      */
     double getResponseTime();
-
-    double getHoldTime();
-
-    /*
-    std::string getBGPMessage() {
-        bool hello = nextHop.getHello();
-        BGPMessage message = OPEN;
-        std::string msg = "";
-
-        switch (message)
-        {
-        case OPEN:
-            msg="OPEN";
-            break;
-        case UPDATE:
-            msg="UPDATE";
-            break;
-        case NOTIFICATION:
-            msg="NOTIFICATION";
-            break;
-        case KEEPALIVE:
-            msg="KEEPALIVE";
-            break;
-        default:
-            break;
-        }
-        return msg;
-    }*/
-
     
     /*
     std::vector<std::string> getNeighbours() {

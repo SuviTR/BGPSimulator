@@ -110,39 +110,6 @@ double Connection::getResponseTime() {
     return responseTime;
 }
 
-double Connection::getHoldTime() {
-    double holdTime = RandomGenerator().getRandom(1,6);
-    return holdTime;
-}
-
-
-/*
-std::string Connection::getBGPMessage() {
-    bool hello = nextHop.getHello();
-    BGPMessage message = OPEN;
-    std::string msg = "";
-
-    switch (message)
-    {
-    case OPEN:
-        msg="OPEN";
-        break;
-    case UPDATE:
-        msg="UPDATE";
-        break;
-    case NOTIFICATION:
-        msg="NOTIFICATION";
-        break;
-    case KEEPALIVE:
-        msg="KEEPALIVE";
-        break;
-    default:
-        break;
-    }
-    return msg;
-}*/
-
-
 /*
 std::vector<std::string> getNeighbours() {
     return neighbours;
