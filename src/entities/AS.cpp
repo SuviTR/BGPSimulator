@@ -1,7 +1,5 @@
 #include "AS.h"
 
-#include "Router.cpp"
-
 #include <iostream>
 #include <string>
 #include <vector>
