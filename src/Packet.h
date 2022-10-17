@@ -45,25 +45,35 @@ class Packet {
     std::string getData();
 
     /**
-     * TCP three-way handshake
-     * 
-     * TODO more fields
+     * Create a SYN packet
+     * @param _message data message needed by setPorts()
      */
     void createSYNPacket(std::string _message);
 
     void receiveSYNPacket();
 
+    /**
+     * Generate the source and destination ports
+     * @param _message data message: SYN, ACK, SYN-ACK
+     */
     void setPorts(std::string message);
 
     /**
+     * Set the flags as bits
      * {_CWR, _ECN, _urgent, _acknowledgment, _push, _reset, _syn, _fin}
+     * @param _flagValue the list of flag values
      */ 
     void setSYNFlags(std::vector<int> _flagValue);
 
-    void setResponse(unsigned char _response);
+    //void setResponse(unsigned char _response);
 
-    unsigned char getResponse();
+    //unsigned char getResponse();
 
+    /**
+     * Generate the bit value of the flag
+     * @param _flag name of the flag
+     * @param _value value of the flag
+     */ 
     unsigned char getBitValue(int _flag, int _value);
 
 };

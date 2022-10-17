@@ -12,10 +12,18 @@ class RoutingTable {
   public:
     RoutingTable();
 
+     /**
+     * Add new connection to the routing table
+     * @param _connection available connection
+     */
     void addRoute(Connection _connection);
 
     //Connection getNextHop();
 
+     /**
+     * Get the routing table
+     * @return routing table of the entity
+     */
     std::vector<Connection> getRoutingTable();
    
 };

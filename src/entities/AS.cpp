@@ -7,12 +7,12 @@
 #include <vector>
 #include <random>
 
-AS::AS(std::string _name) { // Constructor with parameters
+AS::AS(std::string _name) {
     name = _name;
     numberOfNetworks = 1;
 }
 
-void AS::createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP) { //6, 1, 6
+void AS::createRouters(int _numberOfRouters, int _ipPrefix, int _eBGP) {
     numberOfRouters = _numberOfRouters;
     ipPrefix = _ipPrefix;
     eBGP = _eBGP;

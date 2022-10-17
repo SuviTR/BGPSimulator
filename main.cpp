@@ -12,47 +12,60 @@
  * 3. Create source host
  * 4. Create destination host
  * 5. Create connections between entities
- * 
+ * 6. Add neighbor connections
  */
 
 int main() {
     
+    /**
+     * 1. Create Autonomous Systems
+     */
     AS AS1 = AS("AS1");
     AS AS2 = AS("AS2");
 
+    /**
+     * - Number of routers in an AS
+     * - Number of networks in total
+     */
     int routersInAS1 = 6;
     int routersInAS2 = 4;
     int numberOfNetworks = 0;
 
+    /**
+     * 2. Create routers
+     * 
+     * 1.param: number of routers
+     * 2.param: the starting number of the IP addresses in the AS
+     * 3.param: edge router connecting two ASes
+     * 
+     * Add created routers to the router list
+     */
     AS1.createRouters(6, 1, 6); //create routers
     std::vector<Device> routerListAS1 = AS1.getRouters();
-
-    /*
-    for (int i = 0; i < routerListAS1.size(); i++) { 
-        std::cout << routerListAS1[i].getName() << "\n";
-    }*/
     
     AS2.createRouters(4, 7, 1);
     std::vector<Device> routerListAS2 = AS2.getRouters();
 
-    /*
-    for (int i = 0; i < routerListAS2.size(); i++) { 
-        std::cout << routerListAS2[i].getName() << "\n";
-    }*/
-
+    /**
+     * 3. Create source host
+     * 4. Create destination host
+     * 
+     * 1.param: id
+     * 2.param: name
+     */
     Device sourceHost = Device(1, "H1");
     Device destinationHost = Device(2, "H2");
 
     /**
      * Configure connections
      * Example AS1:
+     * H1 -> R1 -> R2 -> R6e
+     * H1 -> R3 -> R4 -> R5 -> R6e
+     * 
+     * TODO: routings the other way round
      * H1 <-> R1 <-> R2 <-> R6e
      * H1 <-> R3 <-> R4 <-> R5 <-> R6e
-     * 
-     * TODO: [[H1_id, R1_id], ...] -> loop
-     * TODO: routings vice versa
      */
-
     std::vector<Connection> connsAS1;
     int rows = 7;
     int cols = 2;
@@ -79,16 +92,39 @@ int main() {
         {routerListAS1[4].getName(),routerListAS1[5].getName()}
         };
 
+    /**
+     * Add created connections to the connection list of AS1
+     */    
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             Connection conn = Connection(confAS1[i][j], confAS1[i][j+1], "connAS1", confAS1_names[i][j], confAS1_names[i][j+1], numberOfNetworks++);
             connsAS1.push_back(conn);
+
+            /*
+            //add neighbor connections
+            for (int k = 0; k < routerListAS1.size(); k++) {
+                std::cout << "KK " << k << std::endl;
+                if (k != 0) { //EI TOIMI!!!
+                    if (routerListAS1[k].getId() == confAS1[i][j]) {
+                        std::vector<Connection> connections;
+                        connections.push_back(conn);
+                        routerListAS1[k].setConnections(connections);
+                    } 
+                } else {
+                    
+                    //std::vector<Connection> connections;
+                    //connections.push_back(connsAS1[0]); 
+                    //connections.push_back(connsAS1[3]); //connAS1_H1_R3
+                    //sourceHost.setConnections(connections);
+                }
+            }*/
+
             break;
         }
     }
 
     /**
-     * Configure connections
+     * Configure the connection between AS1 and AS2
      * Example AS1 -> AS2
      */
     Connection conn_AS1_AS2 = Connection(routerListAS1[5].getId(), routerListAS2[0].getId(), "connAS1_AS2", routerListAS1[5].getName(), routerListAS2[0].getName(), numberOfNetworks++);
@@ -96,6 +132,10 @@ int main() {
     /**
      * Configure connections
      * Example AS2:
+     * R7e -> R8 -> R9 -> H2
+     * R7e -> R10 -> H2
+     * 
+     * TODO: routings the other way round
      * R7e <-> R8 <-> R9 <-> H2
      * R7e <-> R10 <-> H2
      */
@@ -121,6 +161,9 @@ int main() {
         {routerListAS2[3].getName(),destinationHost.getName()},
         };
 
+     /**
+     * Add created connections to the connection list of AS2
+     */  
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             Connection conn = Connection(confAS2[i][j], confAS2[i][j+1], "connAS2", confAS2_names[i][j], confAS2_names[i][j+1], numberOfNetworks++);
@@ -130,16 +173,15 @@ int main() {
     }
 
     /**
-     * Set connections to each device
+     * Set neighbour connections to each device
      * 
      * TODO: automate the connection creation process
      */
+    std::vector<Connection> connections;
 
     //source host
-    std::vector<Connection> connections;
-    //Connection connections [2] = {connsAS1[0], connsAS1[3]} //connAS1_H1_R1, connAS1_H1_R3
     connections.push_back(connsAS1[0]); 
-    connections.push_back(connsAS1[3]); //connAS1_H1_R3
+    connections.push_back(connsAS1[3]);
     sourceHost.setConnections(connections);
     connections.clear();
 
@@ -193,33 +235,25 @@ int main() {
     connections.push_back(connsAS2[4]);
     routerListAS2[3].setConnections(connections);
     connections.clear();
-    
-
-    /*Not yet implemented
-    //destination host
-    connections.push_back(connsAS2[2]); //connAS2_R9_H2
-    connections.push_back(connsAS2[4]); //connAS2_R10_H2
-    destinationHost.setConnections(connections);
-    connections.clear();
-    */
-
-
-    /*
-    int neighbour1 = connAS1_H1_R1.getDestinationEntityId();
-    int neighbour2 = connAS1_H1_R3.getDestinationEntityId();
-    std::vector<int> neighbours;
-    neighbours.push_back(neighbour1);
-    neighbours.push_back(neighbour2);
-
-    sourceHost.setNeighbours(neighbours); //set neighbour connections?
-    */
 
     /**
      * Establish a TCP connection
+     */
+
+    /**
+     * Create a SYN packet
      */ 
     Packet synPacket = Packet();
     synPacket.createSYNPacket("SYN");
 
+    /**
+     * Send a packet in the AS1
+     * 
+     * If the receiving entity/entities respond, the fastest response is chosen, 
+     * and the packet is delivered successfully.
+     * 
+     * Otherwise, the connection is down and the transmission is terminated.
+     */ 
     sourceHost.sendPacket(synPacket);
     if (sourceHost.getSendSuccessful()) {
         routerListAS1[0].sendPacket(synPacket);
@@ -230,6 +264,14 @@ int main() {
         }
     }
 
+    /**
+     * Send a packet from the AS1 to AS2, and in the AS2
+     * 
+     * If the receiving entity/entities respond, the fastest response is chosen, 
+     * and the packet is delivered successfully.
+     * 
+     * Otherwise, the connection is down and the transmission is terminated.
+     */ 
     if (routerListAS1[routerListAS1.size()-1].getSendSuccessful()) {
         routerListAS2[0].sendPacket(synPacket);
         for (int i = 1; i < routerListAS2.size(); i++) {
@@ -239,6 +281,9 @@ int main() {
         }
     }
 
+    /**
+     * Create a data packet
+     */ 
     Packet packet = Packet(2500, 80, "Hello World!");
 
 }

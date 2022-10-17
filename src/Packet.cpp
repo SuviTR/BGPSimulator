@@ -19,13 +19,13 @@ std::string Packet::getData() {
 /**
  * TCP three-way handshake
  * 
- * TODO more fields
+ * TODO: more fields
  */
 void Packet::createSYNPacket(std::string _message) {
     setPorts(_message);
     sequenceNumber = 0;
     acknowledgmentnumber = 1;
-    std::vector<int> flagValues; //{0,0,0,0,0,0,1,0};
+    std::vector<int> flagValues; //{0,0,0,0,0,0,1,0}; TODO: set different values
     flagValues.push_back(0);
     flagValues.push_back(0);
     flagValues.push_back(0);
@@ -61,14 +61,14 @@ void Packet::setSYNFlags(std::vector<int> _flagValue) {
         flags.push_back(getBitValue(i, _flagValue[i]));
     }
 }
-
+/*
 void Packet::setResponse(unsigned char _response) {
     response = _response;
 }
 
 unsigned char Packet::getResponse() {
     return response;
-}
+}*/
 
 unsigned char Packet::getBitValue(int _flag, int _value) {
     unsigned char value = 0x00;

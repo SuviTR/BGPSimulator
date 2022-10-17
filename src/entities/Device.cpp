@@ -75,26 +75,27 @@ void Device::setSendSuccessful(bool _sendSuccessful) {
 bool Device::getSendSuccessful() {
     return sendSuccessful;
 }
-
+/*
 void Device::setRoutingTable(RoutingTable _routingTable) {
     routingTable = _routingTable;
-}
+}*/
 
 RoutingTable Device::getRoutingTable() {
     return routingTable;
 }
 
+/*
 void Device::receivePacket(Packet _receivedPacket) {
     receivedPacket = _receivedPacket;
-}
-
+}*/
+/*
 void Device::setNeighbours(std::vector<int> _neighbours) {
     neighbours = _neighbours;
-}
-
+}*/
+/*
 std::vector<int> Device::getNeighbours() {
     return neighbours;
-}
+}*/
 
 void Device::setConnections(std::vector<Connection> _connections) {
     connections = _connections;
