@@ -106,7 +106,7 @@ int Connection::getDistance() {
 }
 
 double Connection::getResponseTime() {
-    double responseTime = RandomGenerator().getRandom(1,10);
+    double responseTime = RandomGenerator().getRandom(1,100);
     return responseTime;
 }
 
