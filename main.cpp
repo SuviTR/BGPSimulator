@@ -236,6 +236,9 @@ int main() {
     routerListAS2[3].setConnections(connections);
     connections.clear();
 
+    std::vector<Device> routerListASes = routerListAS1;
+    routerListASes.insert(routerListASes.end(), routerListAS2.begin(), routerListAS2.end());
+
     /**
      * Establish a TCP connection
      */
@@ -247,7 +250,7 @@ int main() {
     synPacket.createSYNPacket("SYN");
 
     /**
-     * Send a packet in the AS1
+     * Send a packet from AS1 to AS2.
      * 
      * If the receiving entity/entities respond, the fastest response is chosen, 
      * and the packet is delivered successfully.
@@ -256,28 +259,38 @@ int main() {
      */ 
     sourceHost.sendPacket(synPacket);
     if (sourceHost.getSendSuccessful()) {
-        routerListAS1[0].sendPacket(synPacket);
-        for (int i = 1; i < routerListAS1.size(); i++) {
-            if (routerListAS1[i-1].getSendSuccessful()) {
-                routerListAS1[i].sendPacket(synPacket);
-            }
-        }
-    }
+        std::cout << "Current network: " << routerListASes[0].getName() << std::endl;
+        int i = 1;
 
-    /**
-     * Send a packet from the AS1 to AS2, and in the AS2
-     * 
-     * If the receiving entity/entities respond, the fastest response is chosen, 
-     * and the packet is delivered successfully.
-     * 
-     * Otherwise, the connection is down and the transmission is terminated.
-     */ 
-    if (routerListAS1[routerListAS1.size()-1].getSendSuccessful()) {
-        routerListAS2[0].sendPacket(synPacket);
-        for (int i = 1; i < routerListAS2.size(); i++) {
-            if (routerListAS2[i-1].getSendSuccessful()) {
-                routerListAS2[i].sendPacket(synPacket);
+        //get the index of the next hop
+        int index = routerListASes[i-1].getNextHopIndex(routerListASes, routerListASes[i-1].getNextHop());
+        if (index != -1) {
+            i = index;
+        }
+
+        routerListASes[i-1].sendPacket(synPacket);
+        
+        do {
+            std::cout << "routerlist is " << routerListASes[i-1].getName() << routerListASes[i-1].getNextHop() << std::endl;
+
+            if (routerListASes[i-1].getSendSuccessful()) {
+
+                //get the index of the next hop
+                int index = routerListASes[i-1].getNextHopIndex(routerListASes, routerListASes[i-1].getNextHop());
+                if (index != -1) {
+                    i = index;
+                }
+                
+                routerListASes[i].sendPacket(synPacket);
             }
+
+            i++;
+        } while (i < 10);
+
+        if (routerListASes[routerListASes.size()-2].getSendSuccessful()) {
+            std::string nextHop = routerListASes[routerListASes.size()-1].getNextHop();
+
+            routerListASes[routerListASes.size()-1].sendPacket(synPacket);
         }
     }
 

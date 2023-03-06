@@ -18,6 +18,7 @@ class Device {
     std::vector<int> neighbours;
     bool sendSuccessful;
     RoutingTable routingTable;
+    std::string nextHop;
 
   public:
 
@@ -71,6 +72,24 @@ class Device {
      * @return if the packet was successfully sent
      */
     bool getSendSuccessful();
+
+    /**
+     * Set the next hop
+     * @param _nextHop name of the next destination device
+    */
+    void setNextHop(std::string _nextHop);
+
+    /**
+     * Get the next hop
+     * @return name of the next destination device
+    */
+    std::string getNextHop();
+
+    /**
+     * Get the location of the next hop in the device list
+     * @return index of the next destination device
+    */
+    int getNextHopIndex(std::vector<Device> _v, std::string _K);
 
     /**
      * Set the routing table

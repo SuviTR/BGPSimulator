@@ -26,6 +26,7 @@ int Connection::getDestinationEntityId() {
 void Connection::generateName(std::string _ASName, std::string _sourceEntityName, std::string _destinationEntityName) {
     std::string name = _ASName + "_" + _sourceEntityName + "_" + _destinationEntityName; //connAS1_H1_R1
     setName(name);
+    setNextHop(_destinationEntityName);
 }
 
 void Connection::setName(std::string _name) {
@@ -34,6 +35,14 @@ void Connection::setName(std::string _name) {
 
 std::string Connection::getName() {
     return name;
+}
+
+void Connection::setNextHop(std::string _nextHop) {
+    nextHop = _nextHop;
+}
+
+std::string Connection::getNextHop() {
+    return nextHop;
 }
 
 /*

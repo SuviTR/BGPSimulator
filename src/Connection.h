@@ -15,7 +15,7 @@ class Connection {
     int id;
     std::string ipAddress;
     int distance;
-    //std::string name;
+    std::string nextHop;
 
     enum BGPMessage { OPEN, UPDATE, NOTIFICATION, KEEPALIVE };
     std::vector<std::string> neighbours;
@@ -51,6 +51,9 @@ class Connection {
     void generateName(std::string _ASName, std::string _sourceEntityName, std::string _destinationEntityName);
     void setName(std::string _name);
     std::string getName();
+
+    void setNextHop(std::string _nextHop);
+    std::string getNextHop();
 
     /**
      * Configure the connection between two entities

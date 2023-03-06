@@ -1,6 +1,7 @@
 #include "Device.h"
 
 #include "../RoutingTable.cpp"
+#include "../helpers/Vectors.cpp"
 
 #include <string>
 #include <vector>
@@ -10,10 +11,6 @@ Device::Device(int _id, std::string _name) {
     id = _id;
     name = _name;
 }
-/*
-void Device::setConnection(std::vector<Connection> _connections) {
-    connections = _connections;
-}*/
 
 void Device::sendPacket(Packet _sentPacket) {
     sentPacket = _sentPacket;
@@ -56,13 +53,16 @@ void Device::sendPacket(Packet _sentPacket) {
         for (int i = 0; i < routing.size(); i++) {
             std::cout << routing[i].getName() << " " << routing[i].getIPAddress() << std::endl;
         }
+        std::cout << "The next hop is " << fastestConn.getNextHop() << std::endl;
 
         setSendSuccessful(true);
+        setNextHop(fastestConn.getNextHop());
         if (curTime == 1 || prevTime < curTime) {
             message("Packet was successufully transmitted. Response time:", prevTime);
         } else {
             message("Packet was successufully transmitted. Response time:", curTime);
         }
+        
     } else {
         message("Packet could not be transmitted because the connection is not responding. Response time:", curTime);
     }
@@ -75,6 +75,19 @@ void Device::setSendSuccessful(bool _sendSuccessful) {
 bool Device::getSendSuccessful() {
     return sendSuccessful;
 }
+
+void Device::setNextHop(std::string _nextHop) {
+    nextHop = _nextHop;
+}
+
+std::string Device::getNextHop() {
+    return nextHop;
+}
+
+int Device::getNextHopIndex(std::vector<Device> _v, std::string _K) {
+    return Vectors().getIndex(_v, _K);
+}
+
 /*
 void Device::setRoutingTable(RoutingTable _routingTable) {
     routingTable = _routingTable;
