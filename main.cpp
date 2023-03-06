@@ -305,10 +305,9 @@ int main() {
             //get the index of the next hop
             int index = deviceList[i].getNextHopIndex(deviceList, deviceList[i].getNextHop());
             if (index != -1) {
-                i = index - 1;
+                i = index ;
             }
         }
-        i++;
     } while (i < 12);
 
     if (deviceList[deviceList.size()-2].getSendSuccessful()) {
