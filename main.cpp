@@ -306,6 +306,9 @@ int main() {
             int index = deviceList[i].getNextHopIndex(deviceList, deviceList[i].getNextHop());
             if (index != -1) {
                 i = index ;
+            } else {
+                std::cout << "Error: Packet could not be transmitted because the destination host was unreachable." << std::endl;
+                break;
             }
         }
     } while (i < 12);
