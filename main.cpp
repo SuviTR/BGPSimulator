@@ -94,6 +94,16 @@ int main() {
 
     /**
      * Add created connections to the connection list of AS1
+     * 
+     * connsAS1 = [
+     * connAS1_H1_R1,
+     * connAS1_R1_R2,
+     * connAS1_R2_R6e,
+     * connAS1_H1_R3,
+     * connAS1_R3_R4,
+     * connAS1_R4_R5,
+     * connAS1_R5_R6e
+     * ]
      */    
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -122,6 +132,16 @@ int main() {
             break;
         }
     }
+    /*
+    std::cout << "AS1 0 " << connsAS1[0].getName() << std::endl;
+    std::cout << "AS1 1 " << connsAS1[1].getName() << std::endl;
+    std::cout << "AS1 2 " << connsAS1[2].getName() << std::endl;
+    std::cout << "AS1 3 " << connsAS1[3].getName() << std::endl;
+    std::cout << "AS1 4 " << connsAS1[4].getName() << std::endl;
+    std::cout << "AS1 5 " << connsAS1[5].getName() << std::endl;
+    std::cout << "AS1 6 " << connsAS1[6].getName() << std::endl;
+    std::cout << " " << std::endl;
+    */
 
     /**
      * Configure the connection between AS1 and AS2
@@ -163,6 +183,14 @@ int main() {
 
      /**
      * Add created connections to the connection list of AS2
+     * 
+     * connsAS2 = [
+     * connAS2_R7e_R8,
+     * connAS2_R8_R9,
+     * connAS2_R9_H2,
+     * connAS2_R7e_R10,
+     * connAS2_R10_H2,
+     * ]
      */  
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -171,6 +199,13 @@ int main() {
             break;
         }
     }
+    /*
+    std::cout << "AS2 0 " << connsAS2[0].getName() << std::endl;
+    std::cout << "AS2 1 " << connsAS2[1].getName() << std::endl;
+    std::cout << "AS2 2 " << connsAS2[2].getName() << std::endl;
+    std::cout << "AS2 3 " << connsAS2[3].getName() << std::endl;
+    std::cout << "AS2 4 " << connsAS2[4].getName() << std::endl;
+    */
 
     /**
      * Set neighbour connections to each device
@@ -185,59 +220,62 @@ int main() {
     sourceHost.setConnections(connections);
     connections.clear();
 
-    //R1
+    //R1 -> R2
     connections.push_back(connsAS1[1]);
     routerListAS1[0].setConnections(connections);
     connections.clear();
 
-    //R2
+    //R2 -> R6e
     connections.push_back(connsAS1[2]);
     routerListAS1[1].setConnections(connections);
     connections.clear();
 
-    //R3
-    connections.push_back(connsAS1[3]);
+    //R3 -> R4
+    connections.push_back(connsAS1[4]);
     routerListAS1[2].setConnections(connections);
     connections.clear();
 
-    //R4
-    connections.push_back(connsAS1[4]);
+    //R4 -> R5
+    connections.push_back(connsAS1[5]);
     routerListAS1[3].setConnections(connections);
     connections.clear();
 
-    //R5
-    connections.push_back(connsAS1[5]);
+    //R5 -> R6e
+    connections.push_back(connsAS1[6]);
     routerListAS1[4].setConnections(connections);
     connections.clear();
     
-    //R6
+    //R6e -> R7e
     connections.push_back(conn_AS1_AS2);
     routerListAS1[5].setConnections(connections);
     connections.clear();
 
-    //R7
-    connections.push_back(connsAS2[0]);
+    //R7 -> R8 / R10
+    connections.push_back(connsAS2[1]);
     connections.push_back(connsAS2[3]);
     routerListAS2[0].setConnections(connections);
     connections.clear();
 
-    //R8
+    //R8 -> R9
     connections.push_back(connsAS2[1]);
     routerListAS2[1].setConnections(connections);
     connections.clear();
 
-    //R9
+    //R9 -> H2
     connections.push_back(connsAS2[2]);
     routerListAS2[2].setConnections(connections);
     connections.clear();
 
-    //R10
+    //R10 -> H2
     connections.push_back(connsAS2[4]);
     routerListAS2[3].setConnections(connections);
     connections.clear();
 
-    std::vector<Device> routerListASes = routerListAS1;
-    routerListASes.insert(routerListASes.end(), routerListAS2.begin(), routerListAS2.end());
+    std::vector<Device> deviceList = routerListAS1;
+    deviceList.insert(deviceList.end(), routerListAS2.begin(), routerListAS2.end());
+    
+    deviceList.insert(deviceList.begin(), sourceHost);
+    deviceList.insert(deviceList.end(), destinationHost);
 
     /**
      * Establish a TCP connection
@@ -257,41 +295,26 @@ int main() {
      * 
      * Otherwise, the connection is down and the transmission is terminated.
      */ 
-    sourceHost.sendPacket(synPacket);
-    if (sourceHost.getSendSuccessful()) {
-        std::cout << "Current network: " << routerListASes[0].getName() << std::endl;
-        int i = 1;
+    int i = 0;
+    do {
+        std::cout << "Current network " << deviceList[i].getName() << std::endl;
+        deviceList[i].sendPacket(synPacket);
 
-        //get the index of the next hop
-        int index = routerListASes[i-1].getNextHopIndex(routerListASes, routerListASes[i-1].getNextHop());
-        if (index != -1) {
-            i = index;
-        }
+        if (deviceList[i].getSendSuccessful()) {
 
-        routerListASes[i-1].sendPacket(synPacket);
-        
-        do {
-            std::cout << "routerlist is " << routerListASes[i-1].getName() << routerListASes[i-1].getNextHop() << std::endl;
-
-            if (routerListASes[i-1].getSendSuccessful()) {
-
-                //get the index of the next hop
-                int index = routerListASes[i-1].getNextHopIndex(routerListASes, routerListASes[i-1].getNextHop());
-                if (index != -1) {
-                    i = index;
-                }
-                
-                routerListASes[i].sendPacket(synPacket);
+            //get the index of the next hop
+            int index = deviceList[i].getNextHopIndex(deviceList, deviceList[i].getNextHop());
+            if (index != -1) {
+                i = index - 1;
             }
-
-            i++;
-        } while (i < 10);
-
-        if (routerListASes[routerListASes.size()-2].getSendSuccessful()) {
-            std::string nextHop = routerListASes[routerListASes.size()-1].getNextHop();
-
-            routerListASes[routerListASes.size()-1].sendPacket(synPacket);
         }
+        i++;
+    } while (i < 12);
+
+    if (deviceList[deviceList.size()-2].getSendSuccessful()) {
+        std::string nextHop = deviceList[deviceList.size()-1].getNextHop();
+
+        deviceList[deviceList.size()-1].sendPacket(synPacket);
     }
 
     /**

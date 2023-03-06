@@ -24,7 +24,7 @@ void Device::sendPacket(Packet _sentPacket) {
     if (connections.size() > 1) {
         for (int i = 0; i < connections.size(); i++) {
             curTime = connections[i].getResponseTime();
-            std::cout << "curTime " << curTime << "\n";
+            //std::cout << "curTime " << curTime << "\n";
             if (curTime > 1) {
                 if (curTime < prevTime) {
                     fastestConn = connections[i];
@@ -42,7 +42,7 @@ void Device::sendPacket(Packet _sentPacket) {
     }
 
     if (connectionFound) {
-        std::cout << "Connection " << fastestConn.getName() << " was established." << std::endl;
+        //std::cout << "Connection " << fastestConn.getName() << " was established." << std::endl;
 
         RoutingTable routingTable = RoutingTable();
         routingTable.addRoute(fastestConn);
