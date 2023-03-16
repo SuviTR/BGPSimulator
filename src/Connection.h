@@ -1,7 +1,7 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include "entities/Device.h"
+//#include "entities/Device.h"
 
 #include <random>
 

@@ -297,7 +297,7 @@ int main() {
      */ 
     int i = 0;
     do {
-        std::cout << "Current network " << deviceList[i].getName() << std::endl;
+        std::cout << "Current device " << deviceList[i].getName() << std::endl;
         deviceList[i].sendPacket(synPacket);
 
         if (deviceList[i].getSendSuccessful()) {
